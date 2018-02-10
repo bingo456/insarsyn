@@ -53,26 +53,12 @@ def __multivariate_normal(cov, size):
 def multivariate_rayleigh(cov, size):
     """ multivariate rayleigh distribution
 
-    :params cov: covariance matrix. Must be positive-definite
+    :params cov: covariance matrix of the underlying Gaussian. Must be positive-definite
     :params size: number of samples
+
     """
 
-    xs = np.random.normal(size=cov.shape[0]*size).reshape((-1, size))
-    ys = np.random.normal(size=cov.shape[0]*size).reshape((-1, size))
-
-    rs = np.sqrt(xs**2 + ys**2)
-
-    # normalization to unit variance
-    rs *= np.sqrt(2/(4-np.pi))
-
-    # transformation to desired correlated variance
-    L = np.linalg.cholesky(cov)
-    rs = np.dot(L, rs).T
-
-    if size == 1:
-        rs = rs.flatten()
-
-    return rs
+    return np.abs(multivariate_complex_normal(cov, size))
 
 
 def amp_phi_coh2cov(amp, phi, coh):
